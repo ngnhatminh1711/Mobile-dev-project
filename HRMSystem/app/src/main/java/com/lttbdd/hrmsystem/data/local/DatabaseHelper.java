@@ -8,12 +8,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "qlns_database.db";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
 
     public static final String TABLE_USERS = "users";
     public static final String TABLE_DEPARTMENTS = "departments";
     public static final String TABLE_EMPLOYEES = "employees";
     public static final String TABLE_ATTENDANCE = "attendance";
+    public static final String TABLE_LEAVES = "leaves";
     public static final String TABLE_SALARIES = "salaries";
 
     private static final String CREATE_USERS =
@@ -27,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "id_card TEXT,\n" +
                     "role TEXT NOT NULL DEFAULT 'USER',\n" +
                     "is_active INTEGER NOT NULL DEFAULT 1,\n" +
-                    "created_AT INTEGER NOT NULL\n" +
+                    "created_at INTEGER NOT NULL\n" +
                     ")";
 
     private static final String CREATE_DEPARTMENTS =
@@ -54,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "base_salary REAL NOT NULL DEFAULT 0,\n" +
                     "avatar_path TEXT,\n" +
                     "id_card TEXT,\n" +
-                    "is_active TEXT,\n" +
+                    "is_active INTEGER NOT NULL DEFAULT 1,\n" +
                     "created_at INTEGER NOT NULL\n" +
                     ")";
 
@@ -100,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "total_salary REAL NOT NULL DEFAULT 0,\n" +
                     "note TEXT,\n" +
                     "created_by INTEGER,\n" +
-                    "create_at INTEGER NOT NULL,\n" +
+                    "created_at INTEGER NOT NULL,\n" +
                     "UNIQUE(employee_id, month)\n" +
                     ")";
 
@@ -121,8 +122,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS salaries");
+        db.execSQL("DROP TABLE IF EXISTS leaves");
+        db.execSQL("DROP TABLE IF EXISTS attendance");
+        db.execSQL("DROP TABLE IF EXISTS employees");
+        db.execSQL("DROP TABLE IF EXISTS departments");
+        db.execSQL("DROP TABLE IF EXISTS users");
+        onCreate(db);
     }
+
 
     @Override
     public void onConfigure(SQLiteDatabase db) {

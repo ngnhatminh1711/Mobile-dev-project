@@ -11,6 +11,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         dbHelper = new DatabaseHelper(this);
+        dbHelper.getWritableDatabase();
     }
 
     public static DatabaseHelper getDbHelper() {
